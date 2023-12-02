@@ -12,7 +12,7 @@ mongoose.connect(process.env.database).then(() => {
     console.log('Database connected!');
     app.listen(4000, () => {
         console.log('Server is running on port 4000');
-    })
+    });
 }).catch((error) => {
     console.log(error, 'Error while connecting to databse!');
 });
