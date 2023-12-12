@@ -1,12 +1,18 @@
 // import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import GoogleAuth from "../components/GoogleAuth";
+// import GoogleAuth from "../components/GoogleAuth";
 import Header2 from "../components/Header2";
 import { useState } from "react";
+import {useDispatch, useSelector} from 'react-redux';
+
+import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
 
 export default function Signup() {
     const [formData, setFormData] = useState({});
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const {loading, error} = useSelector((state) => state.user);
 
     const handleChange = (e) => {
         setFormData({
@@ -17,18 +23,23 @@ export default function Signup() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
         try {
+            dispatch(signInStart);
             const res = await fetch('/api/auth/signup', {
                 method : 'POST',
                 headers : {'Content-Type' : 'application/json'},
                 body: JSON.stringify(formData)
             });
             const data = await res.json();
-            console.log(data);
+            if (data.success === false) {
+                dispatch(signInFailure(data.message));
+                return;   
+            }
+            dispatch(signInSuccess(data));
             navigate('/signin');
         } catch (error) {
             console.log(error);
+            dispatch(signInFailure(error.message))
         }
     }
 
@@ -48,9 +59,14 @@ export default function Signup() {
                             <input type="email" placeholder='Example@gmail.com' id="email" className='focus:outline-zinc-300 p-3 rounded-lg bg-white' onChange={handleChange}/>
                             <input type="text" placeholder='Mobile' id="mobile" className='focus:outline-zinc-300 p-3 rounded-lg bg-white' onChange={handleChange}/>
                             <input type="password" placeholder='Password...' id="password" className='focus:outline-zinc-300 p-3 rounded-lg bg-white' onChange={handleChange}/>
-                            <button className='bg-zinc-700 rounded-lg p-4 text-gray-100 font-semibold hover:opacity-90'>Sign In</button>
+                            <button disabled={loading} className='bg-zinc-700 rounded-lg p-4 text-gray-100 font-semibold hover:opacity-90'>
+                                {loading ? 'Loading...' : 'Sign Up'}
+                            </button>
+                            {/* <GoogleAuth/> */}
                         </form>
-                        <GoogleAuth/>
+                        <div>
+                            {error && <p className="text-red-700 pt-4">{error}</p>}
+                        </div>
                         <div className='flex pt-5 gap-2'>
                             <p className='font-semibold'>Already have an account?</p>
                             <Link to='/signin'>

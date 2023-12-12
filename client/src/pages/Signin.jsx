@@ -1,15 +1,20 @@
 // import React from 'react';
 // import estate_img from '../assets/estate1.jpg';
 import {Link, useNavigate} from 'react-router-dom';
-import GoogleAuth from '../components/GoogleAuth';
+// import GoogleAuth from '../components/GoogleAuth';
 import Header2 from '../components/Header2';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { signInFailure, signInStart, signInSuccess } from '../redux/user/userSlice';
 
 export default function Signin() {
     const [formData, setFormData] = useState({});
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const {loading, error} = useSelector((state) => state.user);
 
     const handleChange = (e) => {
+
         setFormData({
             ...formData,
             [e.target.id] : e.target.value
@@ -18,16 +23,21 @@ export default function Signin() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            dispatch(signInStart)
             const res = await fetch('/api/auth/signin', {
                 method : 'POST',
                 headers : {'Content-Type' : 'application/json'},
                 body : JSON.stringify(formData)
             });
-            const data = res.json();
-            console.log(data);
+            const data = await res.json();
+            if (data.success === false) {
+                dispatch(signInFailure(data.message));
+                return;
+            }
+            dispatch(signInSuccess(data));
             navigate('/')
         } catch (error) {
-            console.log(error);
+            dispatch(signInFailure(error.message));
         }
     }
 
@@ -43,12 +53,17 @@ export default function Signin() {
                     </div>
                     <div className='w-8/12 flex flex-col sm: w-full'>
                         <h1 className='text-center mb-5 text-3xl font-bold text-zinc-9800'>Sign In</h1>
-                        <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
+                        <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
                             <input type="email" placeholder='Example@gmail.com' id='email' onChange={handleChange} className='focus:outline-zinc-300 p-3 rounded-lg bg-white'/>
                             <input type="password" placeholder='Password...' id='password' onChange={handleChange} className='focus:outline-zinc-300 p-3 rounded-lg bg-white'/>
-                            <button className='bg-zinc-700 rounded-lg p-3 text-gray-100 font-semibold hover:opacity-90'>Sign In</button>
+                            <button disabled={loading} className='bg-zinc-700 rounded-lg p-3 text-gray-100 font-semibold hover:opacity-90'>
+                                {loading ? 'Loading' : 'Sign In'}
+                            </button>
+                            {/* <GoogleAuth/> */}
                         </form>
-                        <GoogleAuth/>
+                        <div>
+                            {error && <p className='text-red-700 pt-4'>{error}</p>}
+                        </div>
                         <div className='flex pt-5 gap-2'>
                             <p className='font-semibold'>Not have an account?</p>
                             <Link to='/signup'>

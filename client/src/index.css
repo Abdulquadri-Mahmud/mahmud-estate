@@ -6,7 +6,15 @@ body{
     background-color: rgb(223, 223, 223);
     overflow-x: hidden;
 }
-
+body::-webkit-scrollbar{
+    width: 0px;
+}
+.sidebar nav a p, .user p{
+    border-bottom: 1px solid rgb(168, 168, 168);
+    padding-bottom: 10px;
+    word-wrap: break-word;
+    width: 100%;
+}
 /* headers */
 .search_wrap{
     top: 45px;
@@ -28,7 +36,7 @@ body{
 
 .estate_img{
     width: 100%;
-    height: 30rem;
+    height: 20rem;
     background-image: url(assets/estate2.jpg);
     background-size: cover;
     background-repeat: no-repeat;
@@ -54,6 +62,15 @@ body{
     /* height: 12rem; */
 }
 
+.image{
+    width: 22%;
+    height: 12rem;
+    margin-bottom: 20px;
+}
+.image img{
+    width: 100%;
+    height: 100%;
+}
 @media screen and (max-width: 640px){
     .singin_wrap{
         align-items: center;
@@ -61,4 +78,14 @@ body{
     .signin_img{
         height: 15rem;
     }
+    /* .image{
+        width: 100%;
+    } */
 }
+/* @media screen and (max-width: 768px) {
+    .image{
+        width: 40%;
+        height: 10rem;
+        margin-bottom: 20px;
+    }
+} */

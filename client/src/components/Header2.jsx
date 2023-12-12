@@ -1,7 +1,10 @@
 // import React from 'react';
+import {useSelector} from 'react-redux';
 import {Link} from 'react-router-dom';
 
 export default function Header2() {
+  const { currentUser } = useSelector((state) => state.user);
+
   return (
     <div>
       <header className="shadow-md bg-zinc-300 p-5 sticky top-0 z-10">
@@ -10,12 +13,14 @@ export default function Header2() {
                 <h1 className="font-bold text-xl">MAHMUD<span className='text-zinc-700'>-ESTATE</span></h1>
             </div>
             <nav className='flex gap-5'>
-            <Link to='/' className='hidden sm:inline font-semibold text-1xl hover:underline '>Home</Link>
-            <Link to='/about' className='hidden sm:inline font-semibold text-1xl hover:underline'>About</Link>
-            <Link to='/signin' className='font-semibold text-1xl hover:underline'>Signin</Link>
-        </nav>
+              <Link to='/' className='hidden sm:inline font-semibold text-1xl hover:underline '>Home</Link>
+              <Link to='/about' className='hidden sm:inline font-semibold text-1xl hover:underline'>About</Link>
+              <Link to='/signin' className='font-semibold text-1xl hover:underline'>
+                {currentUser ? (<img src='' />) : (<li className=''>Signin</li>)}
+              </Link>
+          </nav>
         </div>
-    </header>
+      </header>
     </div>
   )
 }

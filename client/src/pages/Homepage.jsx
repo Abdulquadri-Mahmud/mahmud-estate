@@ -1,8 +1,7 @@
 // import React from 'react';
-// import { IoSearchSharp } from "react-icons/io5";
-import { FaArrowDownLong } from "react-icons/fa6";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
+import DisplayIEstateImg from "../components/DisplayIEstateImg";
 
 export default function Homepage() {
   return (
@@ -23,13 +22,8 @@ export default function Homepage() {
                         </div>
                     </div>
                 </div>
-                <div className="svg2 flex justify-center m-6 w-full">
-                    <svg className="animate-bounce w-12 h-12 bg-zinc-900 rounded-full p-3"><FaArrowDownLong className="text-white font-semibold text-2xl"/></svg>
-                </div>
+                <DisplayIEstateImg/>
             </div>
-            {/* <div className="home_main p-2">
-                <h1>Home Page</h1>
-            </div> */}
         </div>
     </div>
   )
