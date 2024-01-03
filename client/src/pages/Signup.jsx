@@ -1,6 +1,6 @@
 // import React from 'react';
 import { Link, useNavigate } from "react-router-dom";
-// import GoogleAuth from "../components/GoogleAuth";
+import GoogleAuth from "../components/GoogleAuth";
 import Header2 from "../components/Header2";
 import { useState } from "react";
 import {useDispatch, useSelector} from 'react-redux';
@@ -62,7 +62,7 @@ export default function Signup() {
                             <button disabled={loading} className='bg-zinc-700 rounded-lg p-4 text-gray-100 font-semibold hover:opacity-90'>
                                 {loading ? 'Loading...' : 'Sign Up'}
                             </button>
-                            {/* <GoogleAuth/> */}
+                            <GoogleAuth/>
                         </form>
                         <div>
                             {error && <p className="text-red-700 pt-4">{error}</p>}

@@ -1,14 +1,13 @@
 // import React from 'react';
 import { useDispatch } from 'react-redux';
-// import { useNavigate} from 'react-router-dom';
+import { useNavigate} from 'react-router-dom';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import { app } from '../firebase';
 import { signInFailure, signInSuccess } from '../redux/user/userSlice';
 
-
 export default function GoogleAuth() {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   
   const handleGoogleAuth = async () => {
@@ -17,8 +16,6 @@ export default function GoogleAuth() {
       const auth = getAuth(app);
   
       const result = await signInWithPopup(auth, provider);
-      // console.log(result);
-      // console.log(result.user.displayName, result.user.email, result.user.photoURL);
 
       const res = await fetch('/api/auth/google', {
         method: 'POST',
@@ -29,13 +26,13 @@ export default function GoogleAuth() {
           photo : result.user.photoURL
         })
       });
-      const data = res.json();
+      const data = await res.json();
       dispatch(signInSuccess(data));
-      // console.log(data);
-      // navigate('/');
+      navigate('/');
 
     } catch (error) {
-      dispatch(signInFailure('Could not signin to google',error))
+      dispatch(signInFailure('Could not signin to google',error));
+      // console.log('Could not signin to google',error);
     }
   }
 

@@ -8,7 +8,7 @@ import est5 from '../assets/estate2.jpg';
 
 export default function DisplayIEstateImg() {
   return (
-    <div className='flex flex-wrap justify-center gap-3 mt-10'>
+    <div className='flex flex-wrap justify-center gap-2 my-10'>
         <div className="image rounded-lg ">
             <img src={est2} alt="estate" className='object-cover rounded-lg'/>
         </div>

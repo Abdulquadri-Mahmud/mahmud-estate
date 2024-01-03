@@ -3,6 +3,8 @@ import User from '../models/user.models.js';
 import { errorHandler } from '../utils/errorHandler.js';
 import jwt from 'jsonwebtoken'
 
+// Signup Auth Controllers
+
 export const signup = async (req, res, next) => {
     const {username, email, mobile, password} = req.body;
     const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -15,6 +17,8 @@ export const signup = async (req, res, next) => {
         next(error)
     }
 };
+
+// Signin Auth Controllers
 
 export const signin = async(req, res, next) => {
     const {email, password} = req.body;
@@ -38,14 +42,14 @@ export const signin = async(req, res, next) => {
     }
 }
 
-
+// Google Auth Controllers
 export const google = async (req, res, next) => {
     const user = await User.findOne({ email : req.body.email });
     try {
         if(user){
             const token = jwt.sign({id: user.id}, process.env.JWT_SECRET)
             const {password: pass, ...rest} = user._doc;
-            res.cookie('access_toekn', token, {httpOnly : true})
+            res.cookie('access_token', token, {httpOnly : true})
             .status(200)
             .json(rest)
         }else{
@@ -70,5 +74,14 @@ export const google = async (req, res, next) => {
         
     } catch (error) {
         next(error);
+    }
+}
+
+export const singOut = (req, res, next) => {
+    try {
+        res.clearCookie('access_token');
+        res.status(200).json('User has been logged out!')
+    } catch (error) {
+        next(error)
     }
 }

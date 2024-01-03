@@ -2,11 +2,14 @@ import express from "express";
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userAuthentication from './routes/user.auth.routes.js';
+import userRoutes from './routes/user.routes.js';
+import cookieParser from 'cookie-parser'
 
 dotenv.config();
 
 const app = express();
 app.use(express.json());
+app.use(cookieParser());
 
 mongoose.connect(process.env.database).then(() => {
     console.log('Database connected!');
@@ -18,6 +21,7 @@ mongoose.connect(process.env.database).then(() => {
 });
 
 app.use('/api/auth', userAuthentication);
+app.use('/api/user', userRoutes);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
