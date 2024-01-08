@@ -15,12 +15,6 @@ body::-webkit-scrollbar{
     word-wrap: break-word;
     width: 100%;
 }
-/* headers */
-.search_wrap{
-    top: 45px;
-    padding: 7px;
-}
-
 .home{
     /* width: 78%; */
 }

@@ -29,9 +29,12 @@ export default function ScreenMode() {
         <p className="dark:text-slate-100"><img src={currentUser.avatar} className="w-10 rounded-full" alt="" /></p>
         <p className="dark:text-slate-100">{currentUser.email}</p>
         <p className="dark:text-slate-100">{currentUser.mobile}</p>
-        <div className="">
-          {/* {currentUser.map()} */}
-        </div>
+
+        {/* <div className="" key={currentUser._id}>
+          {currentUser.map((user) => (
+            <p>{user}</p>
+          ))}
+        </div> */}
       </div>
     </>
   )

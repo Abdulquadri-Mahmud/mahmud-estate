@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import userAuthentication from './routes/user.auth.routes.js';
 import listingRoute from './routes/listing.route.js'
 import userRoutes from './routes/user.routes.js';
+import AvailableUsers from './routes/AvailableUsers.routes.js';
 import cookieParser from 'cookie-parser'
 
 dotenv.config();
@@ -23,7 +24,8 @@ mongoose.connect(process.env.database).then(() => {
 
 app.use('/api/auth', userAuthentication);
 app.use('/api/user', userRoutes);
-app.use('/api/listing', listingRoute)
+app.use('/api/listing', listingRoute);
+app.use('/api/available', AvailableUsers);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;

@@ -7,8 +7,8 @@ import Signup from '../src/pages/Signup';
 import Profile from '../src/pages/Profile';
 import PrivateRoute from '../src/components/PrivateRoute';
 import ScreenMode from '../src/pages/Screen.mode';
-import Contact from '../src/pages/contact';
 import Estatelisting from '../src/pages/Estate.listing';
+import Contact from '../src/pages/Contact';
 // import Header from '../src/components/Header';
 
 export default function Routers() {
