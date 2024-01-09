@@ -5,6 +5,6 @@ import { verifyToken } from '../utils/verifyUserError.js';
 
 const app = express();
 
-app.get('/availusers', verifyToken, AvailableUsers);
+app.get('/availusers:id', verifyToken, AvailableUsers);
 
 export default app;
