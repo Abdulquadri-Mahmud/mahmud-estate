@@ -103,7 +103,8 @@ export default function Estatelisting() {
                 setError(data.message);
             }
             setLoading(false);
-            navigate(`/listing/${data._id}`)
+            console.log(data);
+            // navigate(`/listing/${data._id}`);
         } catch (error) {
             setError(error.message);
             setLoading(false)
@@ -143,7 +144,7 @@ export default function Estatelisting() {
             <Sidebar/>
             <div className={`h-screen font-semibold flex-1`}>
                 <Header/>
-                <main className="text-gray-100 bg-slate-800 dark:bg-slate-700 dark:shadow-2xl my-8 p-3 max-w-4xl mx-auto rounded-lg">
+                <main className="text-gray-100 mx-2 bg-slate-800 dark:bg-slate-700 dark:shadow-2xl my-8 p-3 max-w-4xl mx-auto rounded-lg">
                     <h1 className="text-center font-semibold text-2xl my-2">Create Listing</h1>
                     <form className="flex flex-col mt-4 gap-5 md:flex-row " onSubmit={handleSubmit}>
                         <div className="flex flex-col gap-5 flex-1">
@@ -185,7 +186,7 @@ export default function Estatelisting() {
                                 </div>
                                 <div className="flex gap-4 items-center">
                                     <div className="flex items-center gap-4">
-                                        <input type="number" min='150000' max='100000000' id="regularPrice" onChange={handleChange} value={formData.regularPrice} className="w-20 p-1 rounded-lg border border-gray-300 text-gray-800" required/>
+                                        <input type="number" min='100000' max='100000000' id="regularPrice" onChange={handleChange} value={formData.regularPrice} className="w-20 p-1 rounded-lg border border-gray-300 text-gray-800" required/>
                                         <div className="text-center">
                                             <p>Regular Price</p>
                                             <span className="text-sm">(#/month)</span>

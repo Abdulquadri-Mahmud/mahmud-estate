@@ -9,10 +9,10 @@ import { app } from '../firebase';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
-import { FaChevronCircleRight, FaSignInAlt } from 'react-icons/fa';
-import { ImProfile } from 'react-icons/im';
-import { IoIosContact, IoIosHome } from 'react-icons/io';
-import { SiAboutdotme } from 'react-icons/si';
+// import { FaChevronCircleRight, FaSignInAlt } from 'react-icons/fa';
+// import { ImProfile } from 'react-icons/im';
+// import { IoIosContact, IoIosHome } from 'react-icons/io';
+// import { SiAboutdotme } from 'react-icons/si';
 import Sidebar from '../components/Sidebar';
 
 export default function Profile() {
@@ -23,8 +23,9 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [uploadPerc, setUploadPerc] = useState(0);
   const [fileError, setFileError] = useState(false);
+  const [showListingError, setShowListingError] = useState(false);
 
-  const [open, setOpen] = useState(true);
+  const [userListing, setUserListing] = useState([]);
 
   useEffect(() => {
     if (file) {
@@ -121,7 +122,22 @@ export default function Profile() {
       dispatch(signOutFailure(error.message));
     }
   }
+  const handleListing = async () => {
+    try {
+      setShowListingError(false);
 
+      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const data = await res.json();
+
+      if (data.success === false) {
+        setShowListingError(true);
+         return;
+      }
+      setUserListing(data)
+    } catch (error) {
+      setShowListingError(error.message);
+    }
+  }
 
   return (
     <>
@@ -129,11 +145,11 @@ export default function Profile() {
       <div className="dark:bg-slate-800">
         <div className="flex justify-between">
             <Sidebar/>
-            <div className="home h-screen font-semibold flex-1">
+            <div className="home font-semibold flex-1">
                 <Header/>
-                <div className='m-3'>
-                  <div className='my-6 p-3 rounded bg-slate-800 sm:w-2/4  mx-auto'>
-                    <h1 className='text-gray-100 text-xl text-center'>Profile</h1>
+                <div className='m-2'>
+                  <div className='my-6 p-3 shadow-2xl rounded bg-slate-800 md:w-2/4  mx-auto'>
+                    <h1 className='text-gray-100 text-xl text-center'>My Profile</h1>
                     <form onSubmit={handleSubmit} className='flex items-center flex-col gap-3 mt-4' accept='image/*'>
                       <input type="file" onChange={(e) => setFile(e.target.files[0])} ref={fileRef} className='hidden'/>
                       <img onClick={() => fileRef.current.click()} src={formData.avatar || currentUser.avatar} className='cursor-pointer object-cover rounded-full w-24 h-24'/>
@@ -158,13 +174,42 @@ export default function Profile() {
                           create a listing
                         </Link>
                       </button>
+                      {
+                        showListingError && (<p className='text-red-600 py-1'>{showListingError}</p>)
+                      }
                     </form>
                     <div>{error ? (<p className='text-red-600 py-1'>{error}</p>) : ''}</div>
+                    <div className="flex justify-center py-3">
+                      <button className='uppercase text-center bg-green-600 text-gray-100 w-full rounded py-2' onClick={handleListing}>show listing</button>
+                    </div>
                     <div className='flex justify-between py-2 text-gray-100 font-semibold'>
                       <span className='cursor-pointer text-red-600' onClick={handleDelete}>Delete Account</span>
                       <span className='cursor-pointer' onClick={handleSignOut}>Sign Out</span>
                     </div>
                   </div>
+              </div>
+              <div className="my-5 bg-slate-800 mx-2 rounded text-gray-100 p-3">
+                <div className="flex justify-center py-3">
+                  <p className='uppercase text-center bg-slate-700 w-3/12 rounded py-3'>Your Listings</p>
+                </div>
+                <div className="flex flex-wrap justify-center items-center gap-3">
+                  {
+                    userListing && userListing.length > 0 &&
+                      userListing.map((listing) => (
+                        <div className="w-5/12 flex flex-col p-2 bg-slate-700 rounded shadow-xl" key={listing._id}>
+                            <img className='rounded object-contain' src={listing.imageUrls[0]} alt="" />
+                            <Link className='pt-4 truncate' to={`/listing/${listing._id}`}>
+                              <span className='underline'>{listing.name}</span>
+                            </Link>
+                            <div className="flex justify-between py-3">
+                              <button className='bg-green-600 w-20 h-8 rounded'>Edit</button>
+                              <button className='bg-red-500 w-20 h-8 rounded'>Delete</button>
+                            </div>
+                        </div>
+                        
+                      ))
+                    }
+                </div>
               </div>
             </div>
         </div>
