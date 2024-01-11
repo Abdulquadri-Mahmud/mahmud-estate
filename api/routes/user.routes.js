@@ -6,6 +6,6 @@ const app = express();
 
 app.post('/update/:id',verifyToken, update);
 app.delete('/delete/:id', verifyToken, deleteUser);
-app.get('/listings/:id', verifyToken, getUserListing)
+app.get('/listings/:id', verifyToken, getUserListing);
 
 export default app;

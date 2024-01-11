@@ -104,7 +104,7 @@ export default function Estatelisting() {
             }
             setLoading(false);
             console.log(data);
-            // navigate(`/listing/${data._id}`);
+            navigate(`/listing/${data._id}`);
         } catch (error) {
             setError(error.message);
             setLoading(false)
@@ -186,7 +186,7 @@ export default function Estatelisting() {
                                 </div>
                                 <div className="flex gap-4 items-center">
                                     <div className="flex items-center gap-4">
-                                        <input type="number" min='100000' max='100000000' id="regularPrice" onChange={handleChange} value={formData.regularPrice} className="w-20 p-1 rounded-lg border border-gray-300 text-gray-800" required/>
+                                        <input type="number" min='10000' max='100000000' id="regularPrice" onChange={handleChange} value={formData.regularPrice} className="w-20 p-1 rounded-lg border border-gray-300 text-gray-800" required/>
                                         <div className="text-center">
                                             <p>Regular Price</p>
                                             <span className="text-sm">(#/month)</span>
@@ -210,7 +210,7 @@ export default function Estatelisting() {
                             <p><strong>Image: </strong><span className="font-normal">The first image will be the cover (max 6)</span></p>
                             <div className="my-4 flex gap-2">
                                 <input onChange={(e) => setFile(e.target.files)} className="cursor-pointer w-full border border-gray-500 rounded-lg" type="file" id="file"  accept="image/*" multiple/>
-                                <button onClick={handleUpload} className="uppercase bg-gray-300 text-center text-gray-800 py-2 rounded-lg font-semibold w-full md:w-24" type="button">
+                                <button onClick={handleUpload} className="uppercase bg-gray-300 text-center text-sm text-gray-800 py-2 rounded-lg font-semibold w-full md:w-24" type="button">
                                     {
                                         uploadImage ? 'Uploading' : 'Upload'
                                     }

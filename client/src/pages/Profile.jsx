@@ -6,9 +6,10 @@ import { deleteUserFailure, deleteUserStart, deleteUserSuccess,
 from '../redux/user/userSlice';
 import { useEffect, useRef, useState } from 'react';
 import { app } from '../firebase';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, getStorage, list, ref, uploadBytesResumable } from 'firebase/storage';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
+import { TbCurrencyNaira } from "react-icons/tb";
 // import { FaChevronCircleRight, FaSignInAlt } from 'react-icons/fa';
 // import { ImProfile } from 'react-icons/im';
 // import { IoIosContact, IoIosHome } from 'react-icons/io';
@@ -24,7 +25,7 @@ export default function Profile() {
   const [uploadPerc, setUploadPerc] = useState(0);
   const [fileError, setFileError] = useState(false);
   const [showListingError, setShowListingError] = useState(false);
-
+  const [listingDeleteError, setListingDeleteError] = useState();
   const [userListing, setUserListing] = useState([]);
 
   useEffect(() => {
@@ -133,12 +134,30 @@ export default function Profile() {
         setShowListingError(true);
          return;
       }
-      setUserListing(data)
+      setUserListing(data);
     } catch (error) {
       setShowListingError(error.message);
     }
   }
+  
+  const handleListingDelete = async (listingId) =>{
+    try {
+      setListingDeleteError(false);
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: 'DELETE'
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        setListingDeleteError(false);
+      }
+      setUserListing((prevData) => 
+        prevData.filter((listing) => listing._id !== listingId)
+      );
+    } catch (error) {
+      setListingDeleteError('Error while deleting listing!',error)
+    }
 
+  }
   return (
     <>
       {/* <Header2/> */}
@@ -150,9 +169,13 @@ export default function Profile() {
                 <div className='m-2'>
                   <div className='my-6 p-3 shadow-2xl rounded bg-slate-800 md:w-2/4  mx-auto'>
                     <h1 className='text-gray-100 text-xl text-center'>My Profile</h1>
-                    <form onSubmit={handleSubmit} className='flex items-center flex-col gap-3 mt-4' accept='image/*'>
-                      <input type="file" onChange={(e) => setFile(e.target.files[0])} ref={fileRef} className='hidden'/>
-                      <img onClick={() => fileRef.current.click()} src={formData.avatar || currentUser.avatar} className='cursor-pointer object-cover rounded-full w-24 h-24'/>
+                    <form onSubmit={handleSubmit} className='flex items-center flex-col gap-4 mt-4' accept='image/*'>
+                    <div className="flex justify-center">
+                      <div className="bg-slate-700 p-2 rounded-full">
+                        <input type="file" onChange={(e) => setFile(e.target.files[0])} ref={fileRef} className='hidden'/>
+                        <img onClick={() => fileRef.current.click()} src={formData.avatar || currentUser.avatar} className='cursor-pointer object-cover rounded-full w-24 h-24'/>
+                        </div>
+                    </div>
                       {
                         fileError ? (<span className='text-red-700'>Error while uploading image</span>) :
                         uploadPerc > 0 && uploadPerc < 100 ? (<span>{ `Uploading is ${uploadPerc}% done` }</span>)
@@ -162,14 +185,14 @@ export default function Profile() {
                           ''
                         )
                       }
-                      <input type="text" className='p-2 w-full rounded' onChange={handleChange} placeholder='Username' id='username' defaultValue={currentUser.username}/>
-                      <input type="text" className='p-2 w-full rounded' onChange={handleChange} placeholder='Example@gmail.com' id='email' defaultValue={currentUser.email}/>
-                      <input type="number" className='p-2 w-full rounded' onChange={handleChange} placeholder='Phone Number' id='mobile' defaultValue={currentUser.mobile}/>
-                      <input type="text" className='p-2 w-full rounded' onChange={handleChange} placeholder='Password' id='password'/>
-                      <button className='uppercase bg-gray-100 sm:w-40 p-2 w-52 bg-slate- rounded-lg font-semibold text-1xl'>
+                      <input type="text" className='p-3 w-full rounded' onChange={handleChange} placeholder='Username' id='username' defaultValue={currentUser.username}/>
+                      <input type="text" className='p-3 w-full rounded' onChange={handleChange} placeholder='Example@gmail.com' id='email' defaultValue={currentUser.email}/>
+                      <input type="number" className='p-3 w-full rounded' onChange={handleChange} placeholder='Phone Number' id='mobile' defaultValue={currentUser.mobile}/>
+                      <input type="text" className='p-3 w-full rounded' onChange={handleChange} placeholder='Password' id='password'/>
+                      <button className='uppercase bg-gray-100 sm:w-40 p-3 w-52 bg-slate- rounded-full font-semibold text-1xl'>
                         {loading ? 'Loading...' : 'Update'}
                       </button>
-                      <button type='button' className='w-full bg-gray-100 rounded-lg p-2 uppercase font-semibold'>
+                      <button type='button' className='w-full bg-gray-100 rounded-lg p-3 uppercase font-semibold'>
                         <Link to='/estate-listing'>
                           create a listing
                         </Link>
@@ -180,7 +203,7 @@ export default function Profile() {
                     </form>
                     <div>{error ? (<p className='text-red-600 py-1'>{error}</p>) : ''}</div>
                     <div className="flex justify-center py-3">
-                      <button className='uppercase text-center bg-green-600 text-gray-100 w-full rounded py-2' onClick={handleListing}>show listing</button>
+                      <button className='uppercase text-center bg-green-600 text-gray-100 w-full rounded py-3' onClick={handleListing}>show listing</button>
                     </div>
                     <div className='flex justify-between py-2 text-gray-100 font-semibold'>
                       <span className='cursor-pointer text-red-600' onClick={handleDelete}>Delete Account</span>
@@ -190,23 +213,33 @@ export default function Profile() {
               </div>
               <div className="my-5 bg-slate-800 mx-2 rounded text-gray-100 p-3">
                 <div className="flex justify-center py-3">
-                  <p className='uppercase text-center bg-slate-700 w-3/12 rounded py-3'>Your Listings</p>
+                  <p className='uppercase text-center bg-slate-700 md:w-3/12 w-5/12 rounded py-3'>Your Listings</p>
                 </div>
-                <div className="flex flex-wrap justify-center items-center gap-3">
+                <div className="flex flex-wrap justify-center items-center gap-3 relative">
                   {
                     userListing && userListing.length > 0 &&
                       userListing.map((listing) => (
-                        <div className="w-5/12 flex flex-col p-2 bg-slate-700 rounded shadow-xl" key={listing._id}>
-                            <img className='rounded object-contain' src={listing.imageUrls[0]} alt="" />
-                            <Link className='pt-4 truncate' to={`/listing/${listing._id}`}>
-                              <span className='underline'>{listing.name}</span>
-                            </Link>
-                            <div className="flex justify-between py-3">
-                              <button className='bg-green-600 w-20 h-8 rounded'>Edit</button>
-                              <button className='bg-red-500 w-20 h-8 rounded'>Delete</button>
+                        <div className="md:w-5/12 w-full flex flex-col p-2 bg-slate-700 rounded shadow-xl" key={listing._id}>
+                            <img className='rounded object-contain shadow-2xl w-full' src={listing.imageUrls[0]} alt="" />
+                            <div className="bg-slate-800 mt-3 rounded p-2">
+                              <Link className='pt-2 truncate' to={`/listing/${listing._id}`}>
+                                <span className='underline'>{listing.name}</span>
+                              </Link>
+                              <div className='py-2'>
+                                {listing.regularPrice ? (<p className='flex items-center'><TbCurrencyNaira className='text-xl'/>{listing.regularPrice} &nbsp;
+                                 <span className='w-10 h-7 text-center bg-slate-700 rounded'>{listing.type}</span></p>) : 
+                                 (<p className='flex items-center'><TbCurrencyNaira className='text-xl'/>{listing.discountPrice}</p>)}
+                              </div>
+                              <div className="">
+                                <p>{listing.bedRooms} beds | {listing.bathRooms} baths {listing.parking ? '| parking spot' : ''} {listing.furnished ? '| furnished' : ''}</p>
+                                <p className='truncate py-2'>{listing.address}</p>
+                              </div>
+                              <div className="flex justify-between py-1">
+                                <button className='bg-green-600 w-20 h-8 rounded shadow-md'>Edit</button>
+                                <button className='bg-red-500 w-20 h-8 rounded shadow-md' onClick={()=> handleListingDelete(listing._id)}>Delete</button>
+                              </div>
                             </div>
                         </div>
-                        
                       ))
                     }
                 </div>
