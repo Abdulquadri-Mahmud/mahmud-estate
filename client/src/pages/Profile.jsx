@@ -219,7 +219,7 @@ export default function Profile() {
                   {
                     userListing && userListing.length > 0 &&
                       userListing.map((listing) => (
-                        <div className="md:w-6/12 w-full flex flex-col p-2 bg-slate-700 rounded shadow-xl" key={listing._id}>
+                        <div className="md:w-3/12 w-full flex flex-col p-2 bg-slate-700 rounded shadow-xl" key={listing._id}>
                             <img className='rounded object-contain shadow-2xl w-full' src={listing.imageUrls[0]} alt="" />
                             <div className="bg-slate-800 mt-3 rounded p-2">
                               <Link className='pt-2 truncate' to={`/listing/${listing._id}`}>
