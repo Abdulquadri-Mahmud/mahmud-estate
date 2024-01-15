@@ -12,7 +12,7 @@ export default function Sidebar() {
   const { currentUser } = useSelector((state) => state.user);
   const [open, setOpen] = useState(true);
   return (
-    <div className=''>
+    <div className='hidden md:inline'>
       <div className={`${open ? 'w-20 sm:w-72' : 'w-20'} duration-300 text-white bg-gray-600`}>
                 <div className={`${open ? 'w-20 sm:w-72' : 'w-20'} duration-300 fixed left-0 dark:shadow-2xl top-0 h-screen bg-slate-800`}>
                     <FaChevronCircleRight onClick={() => setOpen(!open)} className={`absolute right-0 top-32 cursor-pointer text-2xl bg-gray-200 rounded-full p-1 text-gray-800 ${!open && 'rotate-180'}`}/>

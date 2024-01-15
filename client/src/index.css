@@ -15,6 +15,11 @@ body::-webkit-scrollbar{
     word-wrap: break-word;
     width: 100%;
 }
+
+.sidebar:hover > .sidemenu{
+    /* width: 50%; */
+}
+
 .home{
     /* width: 78%; */
 }

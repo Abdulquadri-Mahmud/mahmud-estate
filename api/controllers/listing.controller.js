@@ -29,10 +29,21 @@ export const deleteUserListing = async (req,res,next) => {
     }
 }
 
-export const allListings = async (req, res, next) => {
+export const updateListings = async (req, res, next) => {
+    const listing = await Listing.findById(req.params.id)
+    if(!listing){
+        next(errorHandler(404, 'Listing not found!'));
+    }
+    if(req.user.id !== listing.userRef){
+        next(errorHandler(401, 'You can only update your own listing!'))
+    }
     try {
-        await Listing.process.env.database.getCollection();
-        res.status(200).json('')
+         const updatesListing = await Listing.findByIdAndDelete(
+            req.params.id,
+            req.body,
+            {new : true}
+         );
+         res.status(200).json('Updated successfully!')
     } catch (error) {
         next(error)
     }
