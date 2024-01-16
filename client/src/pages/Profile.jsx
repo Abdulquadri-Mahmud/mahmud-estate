@@ -235,7 +235,9 @@ export default function Profile() {
                                 <p className='truncate py-2'>{listing.address}</p>
                               </div>
                               <div className="flex justify-between py-1">
-                                <button className='bg-green-700 w-20 h-8 rounded shadow-md'>Edit</button>
+                                <Link to={`/update-listing/${listing._id}`}>
+                                  <button className='bg-green-700 w-20 h-8 rounded shadow-md' >Edit</button>
+                                </Link>
                                 <button className='bg-red-500 w-20 h-8 rounded shadow-md' onClick={()=> handleListingDelete(listing._id)}>Delete</button>
                               </div>
                             </div>

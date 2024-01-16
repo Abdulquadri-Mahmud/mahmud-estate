@@ -9,6 +9,7 @@ import PrivateRoute from '../src/components/PrivateRoute';
 import ScreenMode from '../src/pages/Screen.mode';
 import Estatelisting from '../src/pages/Estate.listing';
 import Contact from '../src/pages/Contact';
+import UpdateListing from '../src/pages/updateListing';
 // import Header from '../src/components/Header';
 
 export default function Routers() {
@@ -24,6 +25,7 @@ export default function Routers() {
             <Route element={<PrivateRoute/>}>
               <Route path='/profile' element={<Profile/>}/>
               <Route path='/estate-listing' element={<Estatelisting/>}/>
+              <Route path='/update-listing/:userListingId' element={<UpdateListing/>}/>
             </Route>
             <Route path='/screenmode' element={<ScreenMode/>}/>
         </Routes>

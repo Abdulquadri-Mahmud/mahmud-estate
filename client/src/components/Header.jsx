@@ -48,7 +48,7 @@ export default function Header() {
                     <div className="menu">
                         <HiOutlineMenuAlt1 className="text-2xl"/>
                     </div>
-                    <div className="sidemenu fixed right-0 top-0 h-screen bg-slate-800 text-gray-50 overflow-hidden z-10 duration-200 w-80">
+                    <div className="sidemenu fixed right-0 top-0 h-screen bg-slate-800 text-gray-50 overflow-hidden z-10 duration-200 w-0">
                         <div className="menus">
                             <div className={`mx-0 bg-transparent p-3 sm:mx-4 my-2 w-md sm:p-4 flex justify-center sm:bg-slate-700 rounded`}>
                                 <div className="flex items-center flex-col gap-4">
@@ -66,9 +66,9 @@ export default function Header() {
                                     </div>
                                 </Link>
                                 <Link to='/about' className='font-semibold text-1xl bg-slate-700 duration-300 rounded hover:bg-slate-600'>
+                                            <SiAboutdotme  className={`text-xl`}/>
                                     <div className="flex p-2">
                                         <p>
-                                            <SiAboutdotme  className={`text-xl`}/>
                                         </p>
                                         <p className={``}>About</p>
                                     </div>

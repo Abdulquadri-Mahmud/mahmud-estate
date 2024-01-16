@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { app } from "../firebase";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { useSelector } from 'react-redux';
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 
 export default function Estatelisting() {
     const { currentUser } = useSelector((state) => state.user);
@@ -13,6 +13,7 @@ export default function Estatelisting() {
     const [uploadImage, setUploadImage] = useState();
     const [error, setError] = useState();
     const [loading, setLoading] = useState();
+    const params = useParams()
     const navigate = useNavigate();
     const [formData, setFormData] = useState({imageUrls : [],
         name : '',
@@ -28,7 +29,18 @@ export default function Estatelisting() {
         offer : false,
     });
 
-    console.log(formData);
+    useEffect(() => {
+      const fetchUserListing = async () => {
+        const userListingId = params.userListingId;
+        const res = await fetch(`/api/listing/getListing/${userListingId}`);
+        const data = await res.json();
+        if (data.success === false) {
+            console.log(data.message);
+        }
+        setFormData(data);
+      }
+      fetchUserListing()
+    }, [])
 
     const handleUpload = () => {
         if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -89,7 +101,7 @@ export default function Estatelisting() {
             setLoading(true);
             setError(false);
 
-            const response = await fetch('/api/listing/create', {
+            const response = await fetch(`/api/listing/update/${params.userListingId}`, {
                 method : 'POST',
                 headers : {'Content-Type' : 'application/json'},
                 body : JSON.stringify({
@@ -145,12 +157,12 @@ export default function Estatelisting() {
             <div className={`h-screen font-semibold flex-1`}>
                 <Header/>
                 <main className="text-gray-100 mx-2 bg-slate-800 dark:bg-slate-700 dark:shadow-2xl my-8 p-3 max-w-4xl mx-auto rounded-lg">
-                    <h1 className="text-center font-semibold text-2xl my-2">Create Listing</h1>
+                    <h1 className="text-center font-semibold text-2xl my-2">Update Listing</h1>
                     <form className="flex flex-col mt-4 gap-5 md:flex-row " onSubmit={handleSubmit}>
                         <div className="flex flex-col gap-5 flex-1">
-                            <input type="text" placeholder="Name" id="name" maxLength='62' minLength='10' onChange={handleChange} className="p-3 bg-gray-200 rounded-lg border text-gray-800 font-semibold" required/>
-                            <input type="text" placeholder="Description" id="description" onChange={handleChange} className="p-3 bg-gray-200 rounded-lg border text-gray-800 font-semibold" required/>
-                            <input type="text" placeholder="Address" id="address" onChange={handleChange} className="p-3 bg-gray-200 rounded-lg border text-gray-800 font-semibold" required/>
+                            <input type="text" placeholder="Name" id="name" maxLength='62' minLength='10' onChange={handleChange} className="p-3 bg-gray-200 rounded-lg border text-gray-800 font-semibold" defaultValue={formData.name} required/>
+                            <textarea type="text" placeholder="Description" id="description" onChange={handleChange} className="p-3 bg-gray-200 rounded-lg border text-gray-800 font-semibold" defaultValue={formData.description} required/>
+                            <input type="text" placeholder="Address" id="address" onChange={handleChange} className="p-3 bg-gray-200 rounded-lg border text-gray-800 font-semibold" defaultValue={formData.address} required/>
                             <div className="flex gap-7 flex-wrap">
                                 <div className="flex gap-2">
                                     <input type="checkbox" id="sale" className="w-5" checked={formData.type === 'sale'}  onChange={handleChange}/>
@@ -229,7 +241,7 @@ export default function Estatelisting() {
                             </>
                             <button disabled={loading || uploadImage} className="uppercase bg-gray-300 text-gray-800 hover:text-gray-800 w-full p-3 rounded-lg font-semibold hover:bg-gray-400 duration-200">
                                 {
-                                    loading ? 'Creating...' : 'create listing'
+                                    loading ? 'Updating...' : 'Updating listing'
                                 }
                             </button>
                             {error && <p className="text-red-500 pt-3">{error}</p>}
@@ -241,3 +253,4 @@ export default function Estatelisting() {
     </div>
   )
 }
+
