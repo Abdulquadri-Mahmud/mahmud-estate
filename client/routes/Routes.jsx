@@ -10,6 +10,7 @@ import ScreenMode from '../src/pages/Screen.mode';
 import Estatelisting from '../src/pages/Estate.listing';
 import Contact from '../src/pages/Contact';
 import UpdateListing from '../src/pages/updateListing';
+import Listings from '../src/pages/Listings';
 // import Header from '../src/components/Header';
 
 export default function Routers() {
@@ -22,6 +23,8 @@ export default function Routers() {
             <Route path='/contact' element={<Contact/>}/>
             <Route path='/signin' element={<Signin/>}/>
             <Route path='/signup' element={<Signup/>}/>
+            <Route path='/listing/:listingId' element={<Listings/>}/>
+
             <Route element={<PrivateRoute/>}>
               <Route path='/profile' element={<Profile/>}/>
               <Route path='/estate-listing' element={<Estatelisting/>}/>
