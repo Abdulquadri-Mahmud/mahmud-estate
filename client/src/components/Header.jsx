@@ -30,7 +30,7 @@ export default function Header() {
     };
 
   return (
-    <header className="dark:bg-slate-800 shadow-md bg-zinc-300 p-2 sticky top-0 z-10 ">
+    <header className="dark:bg-slate-800 shadow-md bg-gray-100 p-2 sticky top-0 z-10 ">
         <div className='text-black flex justify-between items-center max-w-7xl mx-auto'>
              <div className="p-4">
                 <Link to='/' className='flex items-center gap-2'>

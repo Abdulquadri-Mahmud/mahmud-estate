@@ -1,12 +1,12 @@
 // import React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import { deleteUserFailure, deleteUserStart, deleteUserSuccess,
-   signOutFailure, signOutStart, signOutSuccess, updateUserFailure,
+    signOutFailure, signOutStart, signOutSuccess, updateUserFailure,
     updateUserStart, updateUserSuccess } 
 from '../redux/user/userSlice';
 import { useEffect, useRef, useState } from 'react';
 import { app } from '../firebase';
-import { getDownloadURL, getStorage, list, ref, uploadBytesResumable } from 'firebase/storage';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import { TbCurrencyNaira } from "react-icons/tb";
@@ -167,7 +167,7 @@ export default function Profile() {
             <div className="home font-semibold flex-1">
                 <Header/>
                 <div className='m-2'>
-                  <div className='my-6 p-3 shadow-2xl rounded bg-slate-800 dark:bg-slate-50 md:w-2/4  mx-auto'>
+                  <div className='my-6 p-3 shadow-2xl rounded bg-slate-800 dark:bg-slate-50 md:w-[65%] w-[90%] mx-auto'>
                     <h1 className='text-gray-100 text-xl text-center dark:text-gray-800'>My Profile</h1>
                     <form onSubmit={handleSubmit} className='flex items-center flex-col gap-4 mt-4' accept='image/*'>
                     <div className="flex justify-center">
@@ -219,8 +219,10 @@ export default function Profile() {
                   {
                     userListing && userListing.length > 0 &&
                       userListing.map((listing) => (
-                        <div className="md:w-3/12 w-full flex flex-col p-2 bg-slate-700 rounded shadow-xl" key={listing._id}>
-                            <img className='rounded object-contain shadow-2xl w-full' src={listing.imageUrls[0]} alt="" />
+                        <div className="md:w-[30%] w-full flex flex-col p-2 bg-slate-700 rounded shadow-xl" key={listing._id}>
+                            <div className="md:h-[200px] bg-slate-500">
+                              <img className='rounded object-cover md:h-[100%] shadow-2xl w-full' src={listing.imageUrls[0]} alt="" />
+                            </div>
                             <div className="bg-slate-800 mt-3 rounded p-2">
                               <Link className='pt-2 truncate' to={`/listing/${listing._id}`}>
                                 <span className='underline'>{listing.name}</span>
@@ -231,7 +233,7 @@ export default function Profile() {
                                  (<p className='flex items-center'><TbCurrencyNaira className='text-xl'/>{listing.discountPrice}/month </p>)}
                               </div>
                               <div className="">
-                                <p>{listing.bedRooms} beds | {listing.bathRooms} baths {listing.parking ? '| parking spot' : ''} {listing.furnished ? '| furnished' : ''}</p>
+                                <p className='truncate'>{listing.bedRooms} beds | {listing.bathRooms} baths {listing.parking ? '| parking spot' : ''} {listing.furnished ? '| furnished' : ''}</p>
                                 <p className='truncate py-2'>{listing.address}</p>
                               </div>
                               <div className="flex justify-between py-1">

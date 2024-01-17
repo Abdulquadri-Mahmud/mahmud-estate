@@ -142,7 +142,7 @@ export default function Estatelisting() {
                 [e.target.id] : e.target.checked
             })
         }
-        if (e.target.type === 'number' || e.target.type === 'text') {
+        if (e.target.type === 'number' || e.target.type === 'text' || e.target.id === 'description') {
             setFormData({
                 ...formData,
                 [e.target.id] : e.target.value
@@ -151,13 +151,17 @@ export default function Estatelisting() {
     }
 
   return (
-    <div className="dark:bg-slate-800 mx-2 md:mx-0">
+    <div className="dark:bg-slate-800 md:mx-0">
         <div className="flex justify-between ">
             <Sidebar/>
-            <div className={`h-screen font-semibold flex-1`}>
+            <div className={`font-semibold flex-1`}>
                 <Header/>
-                <main className="text-gray-100 mx-2 bg-slate-800 dark:bg-slate-700 dark:shadow-2xl my-8 p-3 max-w-4xl mx-auto rounded-lg">
-                    <h1 className="text-center font-semibold text-2xl my-2">Update Listing</h1>
+                <main className="text-gray-100 bg-slate-800 dark:bg-slate-700 dark:shadow-2xl my-8 p-3 md:w-[80%] w-[95%] mx-auto rounded-lg">
+                    <div className="flex justify-center">
+                        <div className="my-2 p-2 bg-gray-100 w-[200px] rounded-lg">
+                            <h1 className="text-center font-semibold text-2xl text-slate-800">Update Listing</h1>
+                        </div>
+                    </div>
                     <form className="flex flex-col mt-4 gap-5 md:flex-row " onSubmit={handleSubmit}>
                         <div className="flex flex-col gap-5 flex-1">
                             <input type="text" placeholder="Name" id="name" maxLength='62' minLength='10' onChange={handleChange} className="p-3 bg-gray-200 rounded-lg border text-gray-800 font-semibold" defaultValue={formData.name} required/>

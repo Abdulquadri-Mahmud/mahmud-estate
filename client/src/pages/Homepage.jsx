@@ -9,10 +9,10 @@ export default function Homepage() {
     <div className="dark:bg-slate-800">
         <div className="flex justify-between ">
             <Sidebar/>
-            <div className={`h-screen font-semibold flex-1`}>
+            <div className={`h-scfont-semibold flex-1`}>
                 <Header/>
                 <div className="flex justify-center">
-                    <div className="estate_img mx-1 mt-4 flex justify-center items-center relative">
+                    <div className="estate_img mx-1 flex justify-center items-center relative">
                         <div className="font-semibold text-white text-center w-4/5 sm:w-2/4  py-3 bg-gray-700 rounded-full bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-20">
                             <h2 className="text-1xl ">LET US GUIDE YOUR HOME </h2>
                             <h2 className="text-2xl mt-4">Find Your Future Dream Home...</h2>
